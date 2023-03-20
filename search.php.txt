@@ -1,0 +1,50 @@
+<?php
+// Replace the database credentials with your own
+$servername = "localhost";
+$username = "your_username";
+$password = "your_password";
+$dbname = "your_database_name";
+
+// Get the drug name from the form submission
+$drugName = $_POST["drug-name"];
+
+// Create a connection to the database
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+// Check for errors
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+// Build the SQL query to retrieve the drug data
+$sql = "SELECT * FROM drugs WHERE drug_name = '" . $drugName . "'";
+
+// Execute the query
+$result = $conn->query($sql);
+
+// Check for errors
+if ($conn->error) {
+    die("Error: " . $conn->error);
+}
+
+// If a row was returned, display the drug data
+if ($result->num_rows > 0) {
+    $row = $result->fetch_assoc();
+    $drugName = $row["drug_name"];
+    $iupacName = $row["iupac_name"];
+    $brands = explode(",", $row["brands"]);
+    $indications = explode(",", $row["indications"]);
+
+    echo "<h2>" . $drugName . "</h2>";
+    echo "<table>";
+    echo "<tr><th>IUPAC Name</th><td>" . $iupacName . "</td></tr>";
+    echo "<tr><th>Brands</th><td>" . implode(", ", $brands) . "</td></tr>";
+    echo "<tr><th>Indications</th><td>" . implode(", ", $indications) . "</td></tr>";
+    echo "</table>";
+} else {
+    echo "No drug data found for " . $drugName;
+}
+
+// Close the database connection
+$conn->close();
+?>
