@@ -5,15 +5,15 @@
 	<link rel="stylesheet" type="text/css" href="style.css">
 	<script>
 function search() {
-  var query = document.getElementById("searchbox").value;
+  var query = document.getElementById("drug-name").value;
   if (query == "") {
-    document.getElementById("result").innerHTML = "Please enter a drug name.";
+    document.getElementById("drug-info").innerHTML = "Please enter a drug name.";
     return;
   }
   var xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
-      document.getElementById("result").innerHTML = this.responseText;
+      document.getElementById("drug-info").innerHTML = this.responseText;
     }
   };
   xhttp.open("GET", "search.php?q=" + query, true);
@@ -23,10 +23,10 @@ function search() {
 </head>
 <body>
 	<h1>Neil's Medicines</h1>
-	<form method="post" action="search.php">
+	<form onsubmit="search(); return false;">
 		<label for="drug-name">Drug Name:</label>
-		<input type="text" id="drug-name" name="drug-name">
-		<button type="submit">Search</button>
+		<input type="text" id="drug-name" name="drug-name" onkeyup="search()">
+		<button type="button" onclick="search()">Search</button>
 	</form>
 	<div id="drug-info"></div>
 </body>
